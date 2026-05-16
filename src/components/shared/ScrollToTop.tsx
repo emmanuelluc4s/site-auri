@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUp } from 'lucide-react'
-import { prefersReducedMotion } from '@/lib/utils'
+import { useReducedMotion } from '@/lib/animations'
 
 export default function ScrollToTop() {
   const [show, setShow] = useState(false)
-  const reduced = typeof window !== 'undefined' && prefersReducedMotion()
+  const reduced = useReducedMotion()
 
   useEffect(() => {
     function onScroll() {
@@ -31,8 +31,8 @@ export default function ScrollToTop() {
           initial={reduced ? false : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           exit={reduced ? { opacity: 0 } : { opacity: 0, y: 16 }}
-          transition={reduced ? { duration: 0 } : { duration: 0.2 }}
-          className="fixed bottom-6 left-6 z-30 flex h-12 w-12 items-center justify-center rounded-full bg-foreground text-background shadow-lg ring-1 ring-black/5 transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          transition={reduced ? { duration: 0 } : { duration: 0.25 }}
+          className="fixed bottom-6 left-6 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-gold-500/40 bg-ink-800 text-gold-500 shadow-gold-glow-sm transition-all duration-300 hover:scale-105 hover:bg-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 dark:bg-gold-500 dark:text-ink-900 dark:hover:bg-gold-400"
         >
           <ArrowUp className="h-5 w-5" aria-hidden="true" />
         </motion.button>

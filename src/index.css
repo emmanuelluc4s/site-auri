@@ -2,58 +2,74 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Tokens semânticos (paleta placeholder do Módulo 1 — será refinada no Módulo 2) */
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Modo claro — base ink-50 com accent gold-500 */
+    --background: 0 0% 96%;
+    --foreground: 0 0% 6%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --primary: 199 89% 48%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 199 89% 48%;
+    --card-foreground: 0 0% 6%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 6%;
+    --primary: 41 64% 48%;            /* gold-500 */
+    --primary-foreground: 0 0% 6%;
+    --secondary: 0 0% 90%;
+    --secondary-foreground: 0 0% 6%;
+    --muted: 0 0% 93%;
+    --muted-foreground: 0 0% 43%;
+    --accent: 41 64% 48%;
+    --accent-foreground: 0 0% 6%;
+    --destructive: 352 50% 46%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 41 64% 48%;
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --primary: 199 89% 48%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 199 89% 48%;
+    /* Modo escuro — preto absoluto com gold-400 mais brilhante */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 96%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 96%;
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 96%;
+    --primary: 43 67% 53%;            /* gold-400 */
+    --primary-foreground: 0 0% 6%;
+    --secondary: 0 0% 16%;
+    --secondary-foreground: 0 0% 96%;
+    --muted: 0 0% 16%;
+    --muted-foreground: 0 0% 62%;
+    --accent: 43 67% 53%;
+    --accent-foreground: 0 0% 6%;
+    --destructive: 352 50% 46%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 16%;
+    --input: 0 0% 16%;
+    --ring: 43 67% 53%;
   }
+}
 
+@layer base {
   * {
     @apply border-border;
   }
 
-  body {
-    @apply bg-background text-foreground font-sans antialiased;
+  html {
+    scroll-behavior: smooth;
   }
 
-  /* Respeita preferência de movimento reduzido em todas as animações CSS */
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+
+  /* Respeitar preferência de movimento reduzido */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -63,5 +79,37 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+  }
+
+  /* Scrollbar dourada sutil */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-ink-100 dark:bg-ink-800;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gold-500/60 dark:bg-gold-400/60 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gold-500 dark:bg-gold-400;
+  }
+
+  /* Seleção de texto dourada */
+  ::selection {
+    @apply bg-gold-500/30 text-ink-800 dark:text-ink-50;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .gold-gradient-text {
+    @apply bg-gradient-to-br from-gold-300 via-gold-500 to-gold-700 bg-clip-text text-transparent;
+  }
+  .gold-border-glow {
+    @apply border border-gold-500/40 shadow-gold-glow-sm;
   }
 }
