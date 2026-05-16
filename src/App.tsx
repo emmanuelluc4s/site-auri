@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { AuthProvider } from '@/contexts/AuthContext'
+import { ToastProvider } from '@/components/ui/toast'
 
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
@@ -61,6 +62,7 @@ export default function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
+        <ToastProvider>
         <BrowserRouter>
           <Routes>
             {/* Rotas públicas */}
@@ -95,6 +97,7 @@ export default function App() {
             <Route path="/admin/usuarios" element={<ProtectedAdmin><AdminUsers /></ProtectedAdmin>} />
           </Routes>
         </BrowserRouter>
+        </ToastProvider>
       </AuthProvider>
     </ThemeProvider>
   )

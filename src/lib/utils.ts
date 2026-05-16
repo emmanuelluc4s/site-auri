@@ -30,15 +30,18 @@ export function isPromoActive(product: Product): boolean {
 }
 
 // Monta link do WhatsApp com mensagem pré-preenchida incluindo variantes.
+// Omite campos vazios (sem cor ou sem tamanho).
 export function buildWhatsAppLink(
   phone: string,
   product: Product,
   variant?: ProductVariant,
 ): string {
-  const variantInfo = variant
-    ? ` | Cor: ${variant.color ?? '-'} | Tamanho: ${variant.size ?? '-'}`
-    : ''
-  const msg = `Olá! Tenho interesse no produto: ${product.name}${variantInfo}`
+  const parts: string[] = [`Olá! Tenho interesse no produto: ${product.name}`]
+  if (variant) {
+    if (variant.color) parts.push(`Cor: ${variant.color}`)
+    if (variant.size) parts.push(`Tamanho: ${variant.size}`)
+  }
+  const msg = parts.join(' | ')
   return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`
 }
 
@@ -109,4 +112,51 @@ export function formatDateBR(iso: string): string {
     month: 'short',
     year: 'numeric',
   }).format(new Date(iso))
+}
+
+// Data relativa em pt-BR ("Hoje", "Ontem", "Há 3 dias", "Há 2 semanas")
+// ou dd/mm/yyyy para datas com mais de 30 dias.
+export function formatRelativeDate(iso: string): string {
+  const diffMs = Date.now() - new Date(iso).getTime()
+  const days = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+  if (days <= 0) return 'Hoje'
+  if (days === 1) return 'Ontem'
+  if (days < 7) return `Há ${days} dias`
+  if (days < 30) {
+    const weeks = Math.floor(days / 7)
+    return weeks === 1 ? 'Há 1 semana' : `Há ${weeks} semanas`
+  }
+  return new Date(iso).toLocaleDateString('pt-BR')
+}
+
+// Mapeia nomes de cor comuns (pt-BR) → hex aproximado.
+// Usado para colorir o seletor de variantes.
+const COLOR_MAP: Record<string, string> = {
+  preto:    '#000000',
+  branco:   '#FFFFFF',
+  dourado:  '#C9962C',
+  prata:    '#C0C0C0',
+  marrom:   '#5D4037',
+  cinza:    '#9E9E9E',
+  azul:     '#1976D2',
+  vermelho: '#C62828',
+  verde:    '#2E7D32',
+  rosa:     '#EC407A',
+  roxo:     '#7B1FA2',
+  bege:     '#D7CCC8',
+  amarelo:  '#FFC107',
+  laranja:  '#FB8C00',
+}
+
+export function colorToHex(name: string | null | undefined): string | null {
+  if (!name) return null
+  return COLOR_MAP[name.trim().toLowerCase()] ?? null
+}
+
+// Inicial(is) para avatar (pega 1-2 chars do nome).
+export function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/)
+  if (parts.length === 0) return '?'
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
 }
