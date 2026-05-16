@@ -22,6 +22,7 @@ import Avaliacoes from '@/pages/Avaliacoes'
 import QuemSomos from '@/pages/QuemSomos'
 import FaleConosco from '@/pages/FaleConosco'
 import DesignSystem from '@/pages/DesignSystem'
+import DataTest from '@/pages/DataTest'
 
 import AdminLogin from '@/pages/admin/Login'
 import AdminDashboard from '@/pages/admin/Dashboard'
@@ -73,8 +74,9 @@ export default function App() {
             <Route path="/quem-somos" element={<PublicLayout><QuemSomos /></PublicLayout>} />
             <Route path="/fale-conosco" element={<PublicLayout><FaleConosco /></PublicLayout>} />
 
-            {/* Página temporária de validação visual — remover antes do deploy final */}
+            {/* Páginas temporárias de validação — remover antes do deploy final */}
             <Route path="/design-system" element={<PublicLayout><DesignSystem /></PublicLayout>} />
+            <Route path="/data-test" element={<PublicLayout><DataTest /></PublicLayout>} />
 
             {/* Login admin (sem guard) */}
             <Route path="/admin/login" element={<AdminLogin />} />
