@@ -18,12 +18,16 @@ interface ProductCardProps {
   product: Product
   variant?: 'default' | 'compact'
   showQuickView?: boolean
+  // Quando definido, o overlay "Ver detalhes" no hover (desktop) abre o Quick View
+  // em vez de navegar para a página do produto.
+  onQuickView?: () => void
 }
 
 export default function ProductCard({
   product,
   variant = 'default',
   showQuickView = false,
+  onQuickView,
 }: ProductCardProps) {
   const promoActive = isPromoActive(product)
   const cover = product.media?.[0]
@@ -81,11 +85,27 @@ export default function ProductCard({
           </div>
 
           {showQuickView && (
-            <div className="pointer-events-none absolute inset-0 hidden items-end justify-center bg-gradient-to-t from-ink-900/70 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:flex">
-              <span className="mb-4 inline-flex items-center gap-2 rounded-md bg-ink-900/90 px-4 py-2 font-sans text-xs uppercase tracking-wider text-gold-400 ring-1 ring-gold-400/40">
-                <Eye className="h-4 w-4" aria-hidden="true" />
-                Ver detalhes
-              </span>
+            <div className="absolute inset-0 hidden items-center justify-center bg-ink-900/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:flex">
+              {onQuickView ? (
+                <button
+                  type="button"
+                  onClick={e => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    onQuickView()
+                  }}
+                  aria-label={`Ver preview de ${product.name}`}
+                  className="inline-flex items-center gap-2 rounded-md bg-ink-900/85 px-4 py-2 font-sans text-xs uppercase tracking-wider text-gold-400 ring-1 ring-gold-400/40 backdrop-blur-sm transition-transform hover:scale-105"
+                >
+                  <Eye className="h-4 w-4" aria-hidden="true" />
+                  Ver detalhes
+                </button>
+              ) : (
+                <span className="pointer-events-none inline-flex items-center gap-2 rounded-md bg-ink-900/85 px-4 py-2 font-sans text-xs uppercase tracking-wider text-gold-400 ring-1 ring-gold-400/40 backdrop-blur-sm">
+                  <Eye className="h-4 w-4" aria-hidden="true" />
+                  Ver detalhes
+                </span>
+              )}
             </div>
           )}
         </div>
