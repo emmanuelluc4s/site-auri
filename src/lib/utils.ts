@@ -94,3 +94,19 @@ export function prefersReducedMotion(): boolean {
   if (typeof window === 'undefined') return false
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
+
+// Extrai o ID do vídeo de uma URL do YouTube (curta ou longa).
+export function getYouTubeId(url: string): string | null {
+  const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/
+  const match = url.match(regex)
+  return match ? match[1] : null
+}
+
+// Formata data ISO em pt-BR (ex: "15 mai 2026").
+export function formatDateBR(iso: string): string {
+  return new Intl.DateTimeFormat('pt-BR', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  }).format(new Date(iso))
+}

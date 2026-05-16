@@ -96,6 +96,7 @@ export interface StoreInfo {
   business_hours: string | null
   hero_title: string | null
   hero_subtitle: string | null
+  hero_video_url: string | null
   updated_at: string
 }
 
