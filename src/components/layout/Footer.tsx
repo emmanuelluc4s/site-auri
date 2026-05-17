@@ -1,7 +1,9 @@
+import type { ComponentType, SVGProps } from 'react'
 import { Link } from 'react-router-dom'
 import { MessageCircle, ShoppingBag } from 'lucide-react'
 import { FacebookIcon, InstagramIcon } from '@/components/shared/BrandIcons'
 import GoldDivider from '@/components/shared/GoldDivider'
+import { useStoreInfo } from '@/hooks/useStoreInfo'
 
 const SITE_LINKS = [
   { to: '/', label: 'Início' },
@@ -11,17 +13,35 @@ const SITE_LINKS = [
   { to: '/avaliacoes', label: 'Avaliações' },
   { to: '/quem-somos', label: 'Quem Somos' },
   { to: '/fale-conosco', label: 'Fale Conosco' },
-]
+] as const
 
-// URLs placeholder — preenchidas via store_info quando o cliente fornecer.
-const SOCIAL_LINKS = [
-  { href: '#', label: 'WhatsApp', icon: MessageCircle },
-  { href: '#', label: 'Instagram', icon: InstagramIcon },
-  { href: '#', label: 'Facebook', icon: FacebookIcon },
-  { href: '#', label: 'OLX', icon: ShoppingBag },
-]
+interface SocialEntry {
+  label: string
+  href: string
+  icon: ComponentType<SVGProps<SVGSVGElement>>
+}
 
 export default function Footer() {
+  const { storeInfo } = useStoreInfo()
+
+  const socials: SocialEntry[] = []
+  if (storeInfo?.whatsapp) {
+    socials.push({
+      label: 'WhatsApp',
+      href: `https://wa.me/${storeInfo.whatsapp}`,
+      icon: MessageCircle,
+    })
+  }
+  if (storeInfo?.instagram) {
+    socials.push({ label: 'Instagram', href: storeInfo.instagram, icon: InstagramIcon })
+  }
+  if (storeInfo?.facebook) {
+    socials.push({ label: 'Facebook', href: storeInfo.facebook, icon: FacebookIcon })
+  }
+  if (storeInfo?.olx) {
+    socials.push({ label: 'OLX', href: storeInfo.olx, icon: ShoppingBag })
+  }
+
   return (
     <footer className="bg-ink-900 text-ink-50">
       <div className="mx-auto max-w-7xl px-6 py-16">
@@ -62,26 +82,33 @@ export default function Footer() {
           {/* Coluna 3 — Redes sociais + horário */}
           <div className="text-center md:text-left">
             <h2 className="font-serif text-lg tracking-wider text-gold-400">Redes sociais</h2>
-            <ul className="mt-4 flex justify-center gap-3 md:justify-start">
-              {SOCIAL_LINKS.map(({ href, label, icon: Icon }) => (
-                <li key={label}>
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Abrir ${label}`}
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-gold-400/40 text-gold-400 transition-all duration-300 hover:border-gold-400 hover:bg-gold-400/10 hover:shadow-gold-glow-sm"
-                  >
-                    <Icon className="h-5 w-5" aria-hidden="true" />
-                  </a>
-                </li>
-              ))}
-            </ul>
+
+            {socials.length > 0 ? (
+              <ul className="mt-4 flex justify-center gap-3 md:justify-start">
+                {socials.map(({ href, label, icon: Icon }) => (
+                  <li key={label}>
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Abrir ${label}`}
+                      title={label}
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-gold-400/40 text-gold-400 transition-all duration-300 hover:border-gold-400 hover:bg-gold-400/10 hover:shadow-gold-glow-sm"
+                    >
+                      <Icon className="h-5 w-5" aria-hidden="true" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-4 text-sm text-ink-400">Em breve</p>
+            )}
+
             <p className="mt-6 text-xs uppercase tracking-wider text-ink-400">
               Horário de atendimento
             </p>
-            <p className="mt-1 text-sm text-ink-300">
-              Em breve {/* será preenchido via store_info */}
+            <p className="mt-1 whitespace-pre-line text-sm text-ink-300">
+              {storeInfo?.business_hours ?? 'Em breve'}
             </p>
           </div>
         </div>
@@ -94,13 +121,12 @@ export default function Footer() {
           <p className="text-xs text-ink-400">
             © 2026 AURI. Todos os direitos reservados.
           </p>
-          {/* Linha decorativa art déco — diamantes dourados */}
-          <div className="flex items-center gap-2 text-gold-400/60">
-            <span className="block h-px w-8 bg-gold-400/40" aria-hidden="true" />
-            <span className="text-[8px]" aria-hidden="true">◆</span>
-            <span className="text-[6px]" aria-hidden="true">◆</span>
-            <span className="text-[8px]" aria-hidden="true">◆</span>
-            <span className="block h-px w-8 bg-gold-400/40" aria-hidden="true" />
+          <div className="flex items-center gap-2 text-gold-400/60" aria-hidden="true">
+            <span className="block h-px w-8 bg-gold-400/40" />
+            <span className="text-[8px]">◆</span>
+            <span className="text-[6px]">◆</span>
+            <span className="text-[8px]">◆</span>
+            <span className="block h-px w-8 bg-gold-400/40" />
           </div>
         </div>
       </div>
