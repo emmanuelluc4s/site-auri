@@ -5,6 +5,8 @@ import { Menu, Moon, Search, Sun, X } from 'lucide-react'
 import { useTheme } from '@/contexts/ThemeContext'
 import { cn } from '@/lib/utils'
 import { useReducedMotion } from '@/lib/animations'
+import { useHasActivePromotions } from '@/hooks/useHasActivePromotions'
+import { useHasNewArrivals } from '@/hooks/useHasNewArrivals'
 
 const NAV_LINKS: Array<{ to: string; label: string }> = [
   { to: '/', label: 'Início' },
@@ -42,6 +44,15 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const reduced = useReducedMotion()
+  const hasPromos = useHasActivePromotions()
+  const hasNew = useHasNewArrivals()
+
+  // Mostra ponto dourado pulsante em links que têm conteúdo "fresco".
+  function showDot(to: string): boolean {
+    if (to === '/promocoes') return hasPromos
+    if (to === '/lancamentos') return hasNew
+    return false
+  }
 
   return (
     <motion.header
@@ -86,6 +97,16 @@ export default function Navbar() {
               {({ isActive }) => (
                 <>
                   {link.label}
+                  {showDot(link.to) && (
+                    <span
+                      aria-label="conteúdo novo"
+                      title="Novidades disponíveis"
+                      className="absolute -right-2.5 -top-1 inline-flex h-1.5 w-1.5 items-center justify-center"
+                    >
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold-500 opacity-60 dark:bg-gold-400" />
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-gold-500 dark:bg-gold-400" />
+                    </span>
+                  )}
                   <span
                     className={cn(
                       'absolute -bottom-1.5 left-0 h-px bg-gold-500 dark:bg-gold-400 transition-all duration-300',

@@ -1,23 +1,34 @@
 import { Select, type SelectOption } from '@/components/ui/select'
-import type { SortOption } from '@/types'
 
-interface SortDropdownProps {
-  value: SortOption
-  onChange: (value: SortOption) => void
+interface SortDropdownProps<T extends string> {
+  value: T
+  onChange: (value: T) => void
+  // Opções extras (ex: "Maior desconto" só na página de Promoções).
+  // Ficam no topo da lista, antes das padrão.
+  extraOptions?: ReadonlyArray<SelectOption<T>>
 }
 
-const SORT_OPTIONS: ReadonlyArray<SelectOption<SortOption>> = [
+const DEFAULT_OPTIONS = [
   { value: 'newest',     label: 'Mais recentes' },
   { value: 'price_asc',  label: 'Menor preço' },
   { value: 'price_desc', label: 'Maior preço' },
   { value: 'popular',    label: 'Mais populares' },
-]
+] as const
 
-export default function SortDropdown({ value, onChange }: SortDropdownProps) {
+export default function SortDropdown<T extends string = string>({
+  value,
+  onChange,
+  extraOptions = [],
+}: SortDropdownProps<T>) {
+  const options: ReadonlyArray<SelectOption<T>> = [
+    ...extraOptions,
+    ...(DEFAULT_OPTIONS as unknown as ReadonlyArray<SelectOption<T>>),
+  ]
+
   return (
-    <Select<SortOption>
+    <Select<T>
       value={value}
-      options={SORT_OPTIONS}
+      options={options}
       onChange={onChange}
       ariaLabel="Ordenar por"
     />
