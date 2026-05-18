@@ -94,7 +94,11 @@ export default function App() {
             <Route path="/admin/banners" element={<ProtectedAdmin><AdminBanners /></ProtectedAdmin>} />
             <Route path="/admin/conteudo" element={<ProtectedAdmin><AdminContent /></ProtectedAdmin>} />
             <Route path="/admin/loja" element={<ProtectedAdmin><AdminStoreInfo /></ProtectedAdmin>} />
-            <Route path="/admin/usuarios" element={<ProtectedAdmin><AdminUsers /></ProtectedAdmin>} />
+            <Route path="/admin/usuarios" element={
+              <AdminGuard requireOwner>
+                <AdminLayout><AdminUsers /></AdminLayout>
+              </AdminGuard>
+            } />
           </Routes>
         </BrowserRouter>
         </ToastProvider>
