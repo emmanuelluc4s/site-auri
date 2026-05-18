@@ -5,6 +5,27 @@
 
 ---
 
+## ✅ Status atual (atualizado em 2026-05-18)
+
+**Projeto concluído.** Todos os 10 módulos finalizados.
+
+- **Supabase Project Ref:** `cmfjyhspckiosbdygkfg` (região `sa-east-1`)
+- **Owner inicial:** `auri.oficialbr@gmail.com`
+- **Edge Functions deployadas:** `auto-deactivate-promotions`, `invite-admin`
+- **Migrations aplicadas:** 7 (schema, RLS, RPC, storage buckets, hero_video, seed admin, reset senha)
+- **Buckets de Storage:** `product-images`, `banners` (públicos)
+- **Site em produção:** _aguardando deploy na Vercel pelo cliente_ (ver README.md)
+- **Domínio:** _a configurar quando o cliente adquirir_
+
+### O que falta pro deploy
+
+1. Push do repositório local para o GitHub
+2. Conectar Vercel ao repositório (Add New → Project)
+3. Adicionar 3 env vars na Vercel: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_WHATSAPP_NUMBER`
+4. Atualizar Site URL no Supabase (Authentication → URL Configuration) para a URL da Vercel
+
+---
+
 ## 🏪 Visão Geral do Projeto
 
 **AURI** é uma loja online de acessórios e eletrônicos com identidade visual moderna e tecnológica. O site é um catálogo que direciona clientes ao WhatsApp para fechar pedidos, com painel administrativo multi-usuário completo.
@@ -580,25 +601,43 @@ function isPromoActive(product: Product): boolean {
 
 ---
 
-## 📌 Informações Pendentes
+## 📌 Itens entregues e pendências do cliente
 
-| Item | Necessário no Módulo | Status |
-|---|---|---|
-| Número do WhatsApp | Módulo 1 | ⏳ Aguardando |
-| Logo (SVG/PNG) | Módulo 2 | ⏳ Aguardando |
-| Paleta de cores (hex) | Módulo 2 | ⏳ Aguardando |
-| Fontes da marca | Módulo 2 | ⏳ Aguardando |
-| @ Instagram | Módulo 1 | ⏳ Aguardando |
-| Link Facebook | Módulo 1 | ⏳ Aguardando |
-| Link OLX | Módulo 1 | ⏳ Aguardando |
-| E-mail do admin owner | Módulo 9 | ⏳ Aguardando |
-| Texto "Quem Somos" | Módulo 8 | ⏳ Aguardando |
-| Foto institucional | Módulo 8 | ⏳ Aguardando |
-| Horário de atendimento | Módulo 8 | ⏳ Aguardando |
-| Vídeo do hero | Módulo 4 | ⏳ Aguardando |
-| Fotos dos produtos | Pós-deploy | ⏳ Aguardando |
+### ✅ Entregues / preenchidos
+
+| Item | Estado |
+|---|---|
+| Número do WhatsApp | `5588996538469` em `.env.local` e `store_info` |
+| Logo | `public/logo.jpeg` (circular, fundo preto, dourado) |
+| Paleta de cores | Dourado `#C9962C` + escala ink #000–#F5F5F5 |
+| Fontes | Playfair Display (serif) + Inter (sans), via Google Fonts |
+| Vídeo do hero | Demo do YouTube; cliente troca em **Admin → Conteúdo** |
+| Owner admin | `auri.oficialbr@gmail.com` (UID `ae69875a-fa0e-43ef-b458-36e006a64f99`) |
+
+### ⏳ A preencher pelo cliente via painel admin
+
+O cliente edita tudo abaixo direto em **`/admin`** sem precisar mexer no código:
+
+| Item | Onde editar |
+|---|---|
+| @ Instagram (URL completa) | Admin → Loja |
+| URL do Facebook | Admin → Loja |
+| URL do OLX | Admin → Loja |
+| Texto "Quem Somos" | Admin → Conteúdo |
+| Foto institucional | Admin → Conteúdo |
+| Horário de atendimento | Admin → Loja |
+| Fotos reais dos produtos | Admin → Produtos (substitui as do Unsplash do seed) |
+| Banner Home Hero / Promo / Lançamentos | Admin → Banners |
+
+### 🔒 Segurança (próximos passos do cliente)
+
+- Trocar a senha do owner (atualmente `Auri2026!` — setada via SQL como contorno
+  do problema de e-mail de recovery)
+- Revogar o Personal Access Token criado durante o Módulo 3
+  (https://supabase.com/dashboard/account/tokens)
+- Rotacionar a senha do banco (foi colada em chat durante o setup)
 
 ---
 
 *CLAUDE.md definitivo — Projeto AURI — gerado a partir de 100 perguntas.*
-*Atualizar sempre que novas decisões forem tomadas.*
+*Atualizado para refletir estado final pós-Módulo 10.*
