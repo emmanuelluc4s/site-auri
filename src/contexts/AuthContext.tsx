@@ -43,7 +43,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSession(nextSession)
         setUser(nextSession?.user ?? null)
         if (nextSession?.user) {
-          void fetchAdminUser(nextSession.user.id)
+          // Marca loading ANTES de buscar o admin: evita que o AdminGuard
+          // veja "tem user, sem adminUser" e bloqueie indevidamente.
+          setLoading(true)
+          // Deferido p/ evitar deadlock conhecido do supabase-js ao
+          // chamar .from() de dentro do callback de onAuthStateChange.
+          const uid = nextSession.user.id
+          setTimeout(() => { void fetchAdminUser(uid) }, 0)
         } else {
           setAdminUser(null)
           setLoading(false)
